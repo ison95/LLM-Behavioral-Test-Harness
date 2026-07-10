@@ -83,14 +83,14 @@ Running suite: max_word_count
 [claude / claude-sonnet-4-6] max words: 100 | word count: 91 | PASS
 Summary: 2/2 tests passed
 
-## 📁 Project Structure
-├── chatbots/          # Provider integrations (OpenAI, Claude)
-├── evals/             # Invariant evaluation logic
-├── test_cases/        # Individual JSON test case definitions
-├── suites.json        # Named groupings of test cases
-├── results/           # Timestamped JSON result artifacts
-├── analysis/          # Result trend analysis
-├── runner.py          # Main entry point with CLI args
+## 📁 Project Structure 
+├── chatbots/          # Provider integrations (OpenAI, Claude) \
+├── evals/             # Invariant evaluation logic \
+├── test_cases/        # Individual JSON test case definitions \
+├── suites.json        # Named groupings of test cases \
+├── results/           # Timestamped JSON result artifacts \
+├── analysis/          # Result trend analysis \ 
+├── runner.py          # Main entry point with CLI args \
 └── requirements.txt
 
 ## 🧪 Test Case Format
