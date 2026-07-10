@@ -1,118 +1,159 @@
-<h2>README.md (V2.1) </h2>
-<h3> AI Chatbot Test Harness (V2.1) </h3>
-This project is a lightweight, dataset-driven testing harness for evaluating the behavioral reliability of large language model (LLM) chatbots. It focuses on validating response invariants (e.g. maximum word count) rather than exact outputs, reflecting the non-deterministic nature of generative AI systems.
+# AI Chatbot Test Harness (V2.0)
 
-The goal of this project is to explore practical testing strategies for AI systems using a traditional QA mindset: constraint validation, edge-case detection, and repeatable evaluation.
+A lightweight, dataset-driven testing harness for evaluating the behavioral reliability of large language model (LLM) chatbots across multiple providers and models. It focuses on validating response invariants rather than exact outputs, reflecting the non-deterministic nature of generative AI systems.
 
-<h3> 🔑 Key Features </h3>
+The goal of this project is to explore practical testing strategies for AI systems using a traditional QA mindset: constraint validation, edge-case detection, repeatable evaluation, and cross-model behavioral comparison.
 
-* Dataset-driven test cases defined in JSON
-* Pluggable chatbot routing (currently OpenAI)
-* Configurable repeated execution per test case
-* Pass/fail aggregation and pass-rate metrics
-* Invariant-based evaluation (e.g. max word count)
-* Persistent, timestamped JSON result artifacts per run
-* Clean separation between:
-  * Chatbot triage
-  * Model interaction
-  * Response evaluation
-* Designed to be extended with additional invariants, models, and metrics
-* Result persistence and trend analysis
+## 🔑 Key Features
 
+- **Multi-provider support** — run evaluations against OpenAI and Anthropic (Claude) from a single harness
+- **CLI-driven execution** — filter test runs by provider (`--bots`), model (`--models`), and suite (`--suites`) without editing code
+- **Suite-based test organization** — group related test cases into named suites via `suites.json` for targeted or full evaluation runs
+- **Dataset-driven test cases** — define test cases in JSON; no code changes required to add new scenarios
+- **Invariant-based evaluation** — assert behavioral constraints (e.g. max word count) rather than exact outputs
+- **Configurable repeated execution** — run each test case multiple times to measure consistency across probabilistic outputs
+- **Pass/fail aggregation with pass-rate metrics** — understand reliability at a glance
+- **Persistent, timestamped result artifacts** — every run generates a JSON result file for trend analysis
+- **Clean separation of concerns** — chatbot routing, model interaction, and response evaluation are fully decoupled
 
-<h3> ❓ Why This Exists </h3>
+## ❓ Why This Exists
 
-Unlike traditional software, AI chatbot responses are probabilistic and may vary between runs. This project demonstrates how to test such systems by asserting behavioral constraints instead of exact outputs.
+Unlike traditional software, AI chatbot responses are probabilistic and may vary between runs and across providers. This project demonstrates how to test such systems by asserting behavioral constraints instead of exact outputs — and how to compare model behavior across providers using the same evaluation framework.
 
 Examples of tested behaviors include:
-* Response length limits
-* Format compliance
-* Stability across repeated runs (future work)
+- Response length limits
+- Format compliance
+- Behavioral consistency across repeated runs
+- Cross-model comparison (OpenAI vs. Claude)
 
-
-<h3> ⚙️ Setup </h3>
+## ⚙️ Setup
 
 1. Create a virtual environment (recommended)
+```bash
 python3 -m venv venv
 source venv/bin/activate
+```
 
 2. Install dependencies
-```
+```bash
 pip install -r requirements.txt
 ```
 
 3. Configure environment variables
-   * Create a .env file based on the provided example: 
-```
-OPENAI_API_KEY=your_api_key_here
+```bash
+cp .env.example .env
+# Add your API keys:
+# OPENAI_API_KEY=your_openai_key
+# ANTHROPIC_API_KEY=your_anthropic_key
 ```
 
-Note: The .env file is intentionally excluded from version control.
+## ▶️ Running the Tests
 
-<h3> ▶️ Running the Tests </h3>
-Run the runner script:
-
-```
+**Run all test cases:**
+```bash
 python runner.py
 ```
-Example Output:
-```
-max words is 100
-word count is 83
-max words is 100
-word count is 78
-{'openai_max100char_test1': True, 'openai_max100char_test2': True}
-Summary: 2/2 tests passed
+
+**Filter by provider:**
+```bash
+python runner.py --bots openai
+python runner.py --bots claude
 ```
 
-Example Test Case:
+**Filter by model:**
+```bash
+python runner.py --models gpt-4o-mini
+python runner.py --models claude-sonnet-4-6
 ```
+
+**Run a specific suite:**
+```bash
+python runner.py --suites max_word_count
+python runner.py --suites safety_checks
+```
+
+**Combine filters:**
+```bash
+python runner.py --bots claude --suites max_word_count
+```
+
+**Example Output:**
+Running suite: max_word_count
+[openai / gpt-4o-mini] max words: 100 | word count: 83 | PASS
+[claude / claude-sonnet-4-6] max words: 100 | word count: 91 | PASS
+Summary: 2/2 tests passed
+
+## 📁 Project Structure
+├── chatbots/          # Provider integrations (OpenAI, Claude)
+├── evals/             # Invariant evaluation logic
+├── test_cases/        # Individual JSON test case definitions
+├── suites.json        # Named groupings of test cases
+├── results/           # Timestamped JSON result artifacts
+├── analysis/          # Result trend analysis
+├── runner.py          # Main entry point with CLI args
+└── requirements.txt
+
+## 🧪 Test Case Format
+
+Each test case specifies the provider, model, prompt, and behavioral invariant to evaluate:
+
+```json
 {
-  "id": "openai_100char_test1",
+  "id": "openai_max100words_test1",
   "bot": "openai",
-  "model": "gpt-5-nano",
+  "model": "gpt-4o-mini",
   "prompt": "Summarize the plot of Hamlet in under 100 words.",
   "invariant_type": "max_words",
   "max_words": 100
 }
 ```
 
-Each test case specifies:
-* The chatbot provider
-* The model to use
-* The prompt
-* The behavioral invariant to evaluate
+## 📦 Suite Configuration
 
-<h3> 📁 Result Persistence </h3>
-
-Each execution of the test harness generates a timestamped JSON file containing aggregated results for all test cases in that run.
-Example result file:
+Group related test cases into named suites in `suites.json`:
 
 ```json
 {
-  "run_timestamp": "2025-12-22T16-44-20",
+  "max_word_count": ["openai_max100words_test1", "claude_max100words_test1"],
+  "safety_checks": ["openai_safety_test1", "claude_safety_test1"]
+}
+```
+
+## 📊 Result Persistence
+
+Each run generates a timestamped JSON artifact:
+
+```json
+{
+  "run_timestamp": "2026-07-10T14-32-00",
   "results": {
-    "openai_max100char_test1": {
+    "openai_max100words_test1": {
       "bot": "openai",
-      "model": "gpt-5-nano",
-      "passes": 2,
+      "model": "gpt-4o-mini",
+      "passes": 3,
+      "fails": 0,
+      "pass_rate": 100.0
+    },
+    "claude_max100words_test1": {
+      "bot": "claude",
+      "model": "claude-sonnet-4-6",
+      "passes": 3,
       "fails": 0,
       "pass_rate": 100.0
     }
   }
 }
 ```
-<h3> 🚧 Current Limitations (V1) </h3>
 
-* Single invariant type (max words)
-* Single chatbot provider (OpenAI)
-* No result persistence
-* No statistical aggregation across runs
+## 🚧 Current Limitations
 
-These are intentional to keep V1 minimal and focused.
+- Single invariant type (max words)
+- No statistical significance testing across runs
+- No automated cross-model comparison reporting
 
-<h3> Future Enhancements (Planned) </h3>
+## 🔮 Planned Enhancements
 
-* Additional invariants (format, refusal handling, factual consistency)
-* Bias and edge-case testing 
-* Multi-provider comparisons (e.g. Gemini, Claude)
+- Additional invariants: refusal handling, format compliance, factual consistency
+- Automated cross-model behavioral comparison reports
+- Bias and edge-case test suites
+- Safety and content policy evaluation suite
