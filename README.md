@@ -26,7 +26,7 @@ Examples of tested behaviors include:
 - Behavioral consistency across repeated runs
 - Cross-model comparison (OpenAI vs. Claude)
 
-## ⚙️ Setup
+## Setup
 
 1. Create a virtual environment (recommended)
 ```bash
