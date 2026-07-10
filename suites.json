@@ -1,0 +1,4 @@
+{
+  "smoke": ["max_char_test_cases"],
+  "full": ["max_char_test_cases"]
+}

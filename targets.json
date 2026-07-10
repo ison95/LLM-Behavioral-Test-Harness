@@ -1,0 +1,6 @@
+[
+  {"bot": "openai", "model": "gpt-5-nano"},
+  {"bot": "openai", "model": "gpt-5"},
+  {"bot": "claude", "model": "claude-sonnet-4-6"},
+  {"bot": "claude", "model": "claude-haiku-4-5"}
+]
