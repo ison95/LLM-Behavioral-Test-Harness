@@ -89,7 +89,7 @@ Summary: 2/2 tests passed
 ├── test_cases/        # Individual JSON test case definitions \
 ├── suites.json        # Named groupings of test cases \
 ├── results/           # Timestamped JSON result artifacts \
-├── analysis/          # Result trend analysis \ 
+├── analysis/          # Result trend analysis \
 ├── runner.py          # Main entry point with CLI args \
 └── requirements.txt
 
