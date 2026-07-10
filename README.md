@@ -4,7 +4,7 @@ A lightweight, dataset-driven testing harness for evaluating the behavioral reli
 
 The goal of this project is to explore practical testing strategies for AI systems using a traditional QA mindset: constraint validation, edge-case detection, repeatable evaluation, and cross-model behavioral comparison.
 
-## 🔑 Key Features
+## Key Features
 
 - **Multi-provider support** — run evaluations against OpenAI and Anthropic (Claude) from a single harness
 - **CLI-driven execution** — filter test runs by provider (`--bots`), model (`--models`), and suite (`--suites`) without editing code
@@ -16,7 +16,7 @@ The goal of this project is to explore practical testing strategies for AI syste
 - **Persistent, timestamped result artifacts** — every run generates a JSON result file for trend analysis
 - **Clean separation of concerns** — chatbot routing, model interaction, and response evaluation are fully decoupled
 
-## ❓ Why This Exists
+## Why This Exists
 
 Unlike traditional software, AI chatbot responses are probabilistic and may vary between runs and across providers. This project demonstrates how to test such systems by asserting behavioral constraints instead of exact outputs — and how to compare model behavior across providers using the same evaluation framework.
 
@@ -47,7 +47,7 @@ cp .env.example .env
 # ANTHROPIC_API_KEY=your_anthropic_key
 ```
 
-## ▶️ Running the Tests
+## Running the Tests
 
 **Run all test cases:**
 ```bash
@@ -83,7 +83,7 @@ Running suite: max_word_count
 [claude / claude-sonnet-4-6] max words: 100 | word count: 91 | PASS
 Summary: 2/2 tests passed
 
-## 📁 Project Structure 
+## Project Structure 
 ├── chatbots/          # Provider integrations (OpenAI, Claude) \
 ├── evals/             # Invariant evaluation logic \
 ├── test_cases/        # Individual JSON test case definitions \
@@ -93,7 +93,7 @@ Summary: 2/2 tests passed
 ├── runner.py          # Main entry point with CLI args \
 └── requirements.txt
 
-## 🧪 Test Case Format
+## Test Case Format
 
 Each test case specifies the provider, model, prompt, and behavioral invariant to evaluate:
 
@@ -108,7 +108,7 @@ Each test case specifies the provider, model, prompt, and behavioral invariant t
 }
 ```
 
-## 📦 Suite Configuration
+## Suite Configuration
 
 Group related test cases into named suites in `suites.json`:
 
@@ -145,13 +145,13 @@ Each run generates a timestamped JSON artifact:
 }
 ```
 
-## 🚧 Current Limitations
+## Current Limitations
 
 - Single invariant type (max words)
 - No statistical significance testing across runs
 - No automated cross-model comparison reporting
 
-## 🔮 Planned Enhancements
+## Planned Enhancements
 
 - Additional invariants: refusal handling, format compliance, factual consistency
 - Automated cross-model behavioral comparison reports
