@@ -1,4 +1,6 @@
 {
-  "smoke": ["max_char_test_cases"],
-  "full": ["max_char_test_cases"]
+  "max_char": ["max_char_test_cases"],
+  "refusal": ["refusal_test_cases"],
+  "smoke": ["max_char_test_cases", "refusal_test_cases"],
+  "full": ["max_char_test_cases", "refusal_test_cases"]
 }

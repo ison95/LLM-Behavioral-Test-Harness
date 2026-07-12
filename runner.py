@@ -26,23 +26,13 @@ def test_case_setup(json_file_name: str, targets: list[dict]) -> list[dict]:
     return expanded
 
 
-def filter_by_bot(test_cases: list[dict], bot: str | None) -> list[dict]:
-    if bot is None:
-        return test_cases
-    return [t for t in test_cases if t["bot"] == bot]
-
-
-def filter_by_model(test_cases: list[dict], model: str | None) -> list[dict]:
-    if model is None:
-        return test_cases
-    return [t for t in test_cases if t["model"] == model]
-
-
+# Loads the service and their corresponding models to use for testing
 def load_targets(targets_filename: str = "targets.json") -> list[dict]:
     with open(targets_filename, "r") as file:
         return json.load(file)
 
 
+# Loads the collection of test cases to run
 def load_suite(suite_name: str, suites_filename: str = "suites.json") -> list[str]:
     with open(suites_filename, "r") as file:
         suites = json.load(file)
@@ -70,8 +60,11 @@ def process_one_test_case(test_case: dict) -> dict:
 
     for _ in range(num_runs):
         resp = response_from_chatbot(test_case["bot"], test_case["model"], test_case["prompt"])
-        resp_eval = evaluate_response_from_chatbot(resp, test_case["invariant_type"],
-                                                   test_case[test_case["invariant_type"]])
+        resp_eval = evaluate_response_from_chatbot(
+            resp,
+            test_case["invariant_type"],
+            test_case.get(test_case["invariant_type"])  # returns None if key doesn't exist
+        )
         if resp_eval:
             passed_runs += 1
         else:
@@ -98,6 +91,7 @@ def evaluate_response_from_chatbot(response: str, invariant_type: str, invariant
     return resp_eval
 
 
+# Creation and formatting of the results file
 def create_results_file(results_dict: dict, test_filename: str) -> None:
     os.makedirs("results", exist_ok=True)
     timestamp = datetime.datetime.now().strftime("%Y-%m-%dT%H-%M")
@@ -110,6 +104,19 @@ def create_results_file(results_dict: dict, test_filename: str) -> None:
     with open(filename, "w") as file:
         json.dump(output, file, indent=2)
     return
+
+
+# Filters for CLI commands
+def filter_by_bot(test_cases: list[dict], bot: str | None) -> list[dict]:
+    if bot is None:
+        return test_cases
+    return [t for t in test_cases if t["bot"] == bot]
+
+
+def filter_by_model(test_cases: list[dict], model: str | None) -> list[dict]:
+    if model is None:
+        return test_cases
+    return [t for t in test_cases if t["model"] == model]
 
 
 def main(test_case_filenames: list[str], bot: str | None = None, model: str | None = None) -> None:
