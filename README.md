@@ -10,7 +10,7 @@ The goal of this project is to explore practical testing strategies for AI syste
 - **CLI-driven execution** — filter test runs by provider (`--bots`), model (`--models`), and suite (`--suites`) without editing code
 - **Suite-based test organization** — group related test cases into named suites via `suites.json` for targeted or full evaluation runs
 - **Dataset-driven test cases** — define test cases in JSON; no code changes required to add new scenarios
-- **Invariant-based evaluation** — assert behavioral constraints (e.g. max word count) rather than exact outputs
+- **Invariant-based evaluation** — assert behavioral constraints (e.g. max word count, refusing dangerous prompts) rather than exact outputs
 - **Configurable repeated execution** — run each test case multiple times to measure consistency across probabilistic outputs
 - **Pass/fail aggregation with pass-rate metrics** — understand reliability at a glance
 - **Persistent, timestamped result artifacts** — every run generates a JSON result file for trend analysis
@@ -147,13 +147,12 @@ Each run generates a timestamped JSON artifact:
 
 ## Current Limitations
 
-- Single invariant type (max words)
 - No statistical significance testing across runs
 - No automated cross-model comparison reporting
 
 ## Planned Enhancements
 
-- Additional invariants: refusal handling, format compliance, factual consistency
+- Additional invariants: format compliance, factual consistency
 - Automated cross-model behavioral comparison reports
 - Bias and edge-case test suites
 - Safety and content policy evaluation suite
