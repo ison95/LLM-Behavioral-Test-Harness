@@ -6,15 +6,15 @@ The goal of this project is to explore practical testing strategies for AI syste
 
 ## Key Features
 
-- **Multi-provider support** — run evaluations against OpenAI and Anthropic (Claude) from a single harness
-- **CLI-driven execution** — filter test runs by provider (`--bots`), model (`--models`), and suite (`--suites`) without editing code
-- **Suite-based test organization** — group related test cases into named suites via `suites.json` for targeted or full evaluation runs
-- **Dataset-driven test cases** — define test cases in JSON; no code changes required to add new scenarios
-- **Invariant-based evaluation** — assert behavioral constraints (e.g. max word count, refusing dangerous prompts) rather than exact outputs
-- **Configurable repeated execution** — run each test case multiple times to measure consistency across probabilistic outputs
-- **Pass/fail aggregation with pass-rate metrics** — understand reliability at a glance
-- **Persistent, timestamped result artifacts** — every run generates a JSON result file for trend analysis
-- **Clean separation of concerns** — chatbot routing, model interaction, and response evaluation are fully decoupled
+- **Multi-provider support**: run evaluations against OpenAI and Anthropic (Claude) from a single harness
+- **CLI-driven execution**: filter test runs by provider (`--bots`), model (`--models`), and suite (`--suites`) without editing code
+- **Suite-based test organization**: group related test cases into named suites via `suites.json` for targeted or full evaluation runs
+- **Dataset-driven test cases**: define test cases in JSON; no code changes required to add new scenarios
+- **Invariant-based evaluation**: assert behavioral constraints (e.g. max word count, refusing dangerous prompts) rather than exact outputs
+- **Configurable repeated execution**: run each test case multiple times to measure consistency across probabilistic outputs
+- **Pass/fail aggregation with pass-rate metrics**: understand reliability at a glance
+- **Persistent, timestamped result artifacts**: every run generates a JSON result file for trend analysis
+- **Clean separation of concerns**: chatbot routing, model interaction, and response evaluation are fully decoupled
 
 ## Why This Exists
 
